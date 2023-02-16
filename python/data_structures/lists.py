@@ -86,3 +86,26 @@ print(copy_list)
 print('My list changed as well')
 print(my_list)
 print()
+
+# while loops with lists use pop()
+users = ['alice', 'cathie', 'michael']
+confirmed_users = []
+
+while users:
+    current_user = users.pop(0)
+    print('Verifying user: ', end='')
+    print(current_user.title())
+    confirmed_users.append((current_user))
+
+print('\nThe following users have been verified:')
+for u in confirmed_users:
+    print(f'  {u.title()}')
+
+# while loops with remove()
+pets = ['horse', 'cat', 'mouse', 'dog', 'cat', 'rabbit']
+
+print()
+while 'cat' in pets:
+    pets.remove('cat')
+
+print(pets)
