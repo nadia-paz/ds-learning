@@ -53,9 +53,66 @@ def exercise1(a: list[int], m:int, k:int) -> int:
 
 # check if works ok
 # should return 5
-print(exercise1([2, 4, 7, 5, 3, 5, 8, 5, 1, 7], 4, 10))
+#print(exercise1([2, 4, 7, 5, 3, 5, 8, 5, 1, 7], 4, 10))
 # should return 2
-print(exercise1(([15, 8, 8, 2, 6, 4, 1, 7]), 2, 8) )  
+#print(exercise1(([15, 8, 8, 2, 6, 4, 1, 7]), 2, 8) )  
 
 # m is bigger than length(a), should return 1
-print(exercise1([2, 4, 7, 5, 3, 5, 8, 5, 1, 7], 12, 10))
+#print(exercise1([2, 4, 7, 5, 3, 5, 8, 5, 1, 7], 12, 10))
+
+# Mini Project 1
+'''
+Manually (without Python) create a project1.txt file with this information:
+alpha, This is the text in alpha
+beta, This is the text in beta
+charlie, This is the text in charlie
+
+
+Write a function to read data from the project1.txt file.
+Create a nested dictionary from it.
+
+Data structure will be:
+{project1: {alpha: This is the text in alpha}, beta: This is the text in beta, charlie: This is the text in charlie}}
+
+Using the nested dictionary write a function to create three files like below:
+
+File = alpha.txt
+Text = This is the text in alpha
+
+File = beta.txt
+Text = This is the text in beta
+
+File = charlie.txt
+Text = This is the text in charlie
+'''
+
+filename = 'text_files/project1.txt'
+d = dict()
+strings = []
+try:
+    with open (filename, 'r') as f:
+        lines = f.readlines()
+    for line in lines:
+        strings.append(line.strip())
+except FileNotFoundError:
+    print(f'File {filename} doesn\'t exist')
+
+for string in strings:
+    string = string.replace(',', '')
+    l = string.split()
+    d[l[0]] = ' '.join(l[1:])
+
+def project1_save_txt(d:dict):
+    '''
+    Saves the information into files
+    '''
+    for key, value in d.items():
+        f_name = 'text_files/' + key + '.txt'
+        #print(f_name)
+        try:
+            with open(f_name, 'w') as f:
+                f.write(value)
+        except FileNotFoundError:
+            print(f'No such file or dircetory {f_name}')
+
+project1_save_txt(d)
