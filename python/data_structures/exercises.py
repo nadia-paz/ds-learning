@@ -1,4 +1,8 @@
 
+import os
+import pprint
+from collections import deque
+
 # Exercise 1
 # Given an array of integers a, your task is to find 
 # how many of its contiguous subarrays of length m 
@@ -86,7 +90,8 @@ File = charlie.txt
 Text = This is the text in charlie
 '''
 
-filename = 'text_files/project1.txt'
+directory = 'text_files'
+filename = directory + '/project1.txt'
 d = dict()
 strings = []
 try:
@@ -106,8 +111,10 @@ def project1_save_txt(d:dict):
     '''
     Saves the information into files
     '''
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
     for key, value in d.items():
-        f_name = 'text_files/' + key + '.txt'
+        f_name = directory + '/' + key + '.txt'
         #print(f_name)
         try:
             with open(f_name, 'w') as f:
@@ -116,3 +123,52 @@ def project1_save_txt(d:dict):
             print(f'No such file or dircetory {f_name}')
 
 project1_save_txt(d)
+
+# exercise 2
+'''
+For the upcoming academic year the Coolcoders University should decide which students will get the scholarships. 
+Scholarships are considered to be correctly distributed if 
+
+all best students have it, but not all students in the university do. 
+
+Obviously, only university students should be able to get a scholarship, 
+i.e. there should be no outsiders in the list of the students that will get a scholarships.
+
+You are given lists of unique student ids bestStudents, scholarships and allStudents, 
+representing ids of the best students, students that will get a scholarship and 
+all the students in the university, respectively. Return true if the scholarships are 
+correctly distributed and false otherwise.
+'''
+
+def exercise2(bestStudents:list[int], scholarships:list[int], allStudents:list[int]):
+    
+    
+    # check if there are no oustsiders and NOT ALL students get scolarship 
+    # set(scholarships) < set(allStudents)
+    # check if all best students get scholarship
+    # set(bestStudents) <= set(scholarships)
+    return set(bestStudents) <= set(scholarships) < set(allStudents)
+
+'''
+Your friend has been doodling during the lecture and wrote down several digits in a circle. 
+You're wondering if these digits might form the password to your friend's computer. 
+You're planning to prank him some time in the future, and hacking into his computer will definitely help. 
+If the digits written in the clockwise order indeed form a password, all you need to do is figure out which digit comes in it first.
+
+Given a list of digits as they are written in the clockwise order, find all other combinations the password could possibly have.
+'''
+
+def exercise3(list_of_numbers:list[int]):
+    # turn list into deque
+    output = [list_of_numbers]
+    list_of_numbers = deque(list_of_numbers)
+    # every time move the first element to the end rotate(-1)
+    for i in range(len(list_of_numbers) - 1):
+        list_of_numbers.rotate(-1)
+        output.append(list(list_of_numbers))
+    return output
+
+from collections import Counter
+t = 'most beautiful day is today. the best day in you life is today as well'
+t = t.replace(' ', '')
+print(Counter(t).most_common(1)[0][0])
