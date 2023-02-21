@@ -72,3 +72,7 @@ for uname, uinfo in users.items():
 
     print(f'\tFull name: {fullname.title()}')
     print(f'\tLocation: {location.title()}')
+
+# generate a dictionary with diff keys and same values
+d = dict.fromkeys(['a', 'b', 'c'], 0)
+print(d)
