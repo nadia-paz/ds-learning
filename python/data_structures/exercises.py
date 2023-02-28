@@ -168,7 +168,37 @@ def exercise3(list_of_numbers:list[int]):
         output.append(list(list_of_numbers))
     return output
 
-from collections import Counter
-t = 'most beautiful day is today. the best day in you life is today as well'
-t = t.replace(' ', '')
-print(Counter(t).most_common(1)[0][0])
+
+'''
+Below we will define an n-interesting polygon. 
+Your task is to find the area of a polygon for a given n.
+A 1-interesting polygon is just a square with a side of length 1. 
+An n-interesting polygon is obtained by taking the n - 1-interesting polygon a
+nd appending 1-interesting polygons to its rim, side by side. 
+1: *
+2:
+ *
+***
+ *
+3:
+  *
+ ***
+*****
+ ***
+  *
+
+'''
+def exercise4(n):
+    if n == 1:
+        return n
+    else:
+        # calculate the side of the square were polygon fits
+        side = n * 2 - 1
+        # calculate the empty area in each corner of the square
+        m = 0
+        for i in range(1, n+1):
+            m = (i-1) + m
+    # calculate the area of the polygon by finding the area of the square
+    # and substracting the 4 empty areas in corners
+    return side * side - 4 * m
+
