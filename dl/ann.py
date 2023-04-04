@@ -39,3 +39,24 @@ def preprocess(X_train, X_test):
     X_test = sc.transform(X_test)
 
     return X_train, X_test
+
+def build_ann_model(layers=2, nodes=[6,6]):
+    '''.DS_Store'''
+    ann = tf.keras.models.Sequential()
+    # add hidden layers
+    for i, layer in enumerate(layers):
+        ann.add(tf.keras.layers.Dense(units=nodes[i], activation='relu'))
+
+    # add an output layer
+    ann.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
+    # compile ANN, adam-> for stochastic GD, loos for non binary _-> catogory_crossentropy
+    ann.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    return ann
+
+def run_model(ann, X_train, y_train, X_test):
+    '''.DS_Store'''
+    ann.fit(X_train, y_train, batch_size=32, epochs=50, verbose=None)
+
+    y_hat = ann.predict(X_test)
+    
