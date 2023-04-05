@@ -6,6 +6,7 @@ import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
+from sklearn.metrics import accuracy_score
 
 
 def acquire():
@@ -41,7 +42,9 @@ def preprocess(X_train, X_test):
     return X_train, X_test
 
 def build_ann_model(layers=2, nodes=[6,6]):
-    '''.DS_Store'''
+    '''
+    
+    '''
     ann = tf.keras.models.Sequential()
     # add hidden layers
     for i, layer in enumerate(layers):
@@ -55,8 +58,12 @@ def build_ann_model(layers=2, nodes=[6,6]):
     return ann
 
 def run_model(ann, X_train, y_train, X_test):
-    '''.DS_Store'''
+    '''
+    returns predictions of classification ANN model
+    '''
     ann.fit(X_train, y_train, batch_size=32, epochs=50, verbose=None)
 
     y_hat = ann.predict(X_test)
-    
+    y_hat = np.where((y_hat > 0.5), 1, 0)
+
+    return y_hat
