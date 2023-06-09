@@ -11,3 +11,4 @@ if __name__ == 'main':
     t = tuple(l[:n])
     print(hash(t))
     # code is not accepted by hacker rank
+    # success if removed if __name__ == 'main' :o)
