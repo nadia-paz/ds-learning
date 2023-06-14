@@ -40,3 +40,17 @@ def count_substring(string, sub_string):
             i = index + 1
             counter += 1
     return counter
+
+def print_string_properties(s:str) -> None:
+    ''' 
+    In the first line, print True if s has any alphanumeric characters. 
+    In the second line, print True if s has any alphabetical characters. 
+    In the third line, print True if s has any digits. 
+    In the fourth line, print True if s has any lowercase characters. 
+    In the fifth line, print True if s has any uppercase characters. 
+    '''
+    print(any([char.isalnum() for char in s]))
+    print(any([char.isalpha() for char in s]))
+    print(any([char.isdigit() for char in s]))
+    print(any([char.islower() for char in s]))
+    print(any([char.isupper() for char in s]))
