@@ -202,3 +202,106 @@ def superDigit(n, k):
             n = n * k
             k = 1
     return int(n)
+
+def truckTour(petrolpumps):
+    # Write your code here
+    litres = [x[0] for x in petrolpumps]
+    kilometers = [x[1] for x in petrolpumps]
+    gas, truck_loc = 0, 0
+    l_sum, k_sum = sum(litres), sum(kilometers)
+    N = len(petrolpumps)
+    
+    for i in range(N):
+        #print('i: ', i)
+        gas += (litres[i] - kilometers[i])
+        #print('gas: ', gas)
+        if gas < 0:
+            #print('inside IF')
+            gas = 0
+            truck_loc = i + 1
+            #print('truck location ', truck_loc)
+        #print()
+    return(truck_loc)
+
+# Day 5
+
+''' FIFO '''
+''' 
+In this challenge, you must first implement a queue using two stacks. 
+Then process  queries, where each query is one of the following  types:
+
+1 x: Enqueue element  into the end of the queue.
+2: Dequeue the element at the front of the queue.
+3: Print the element at the front of the queue.
+'''
+
+# q = Queue() # FIFO
+# LifoQueue() fir last in first out
+# q.put(3)
+# q. put(5)
+# #q.join()
+# print(q.queue) # deque([3, 5])
+# print(q.queue[0]) # 3  
+
+
+from queue import Queue
+q = Queue()
+
+queries = int(input().strip())
+
+for _ in range(queries):
+    query = list(map(int, input().split(' ')))
+    if query[0] == 1:
+        q.put(query[1])
+    elif query[0] == 2:
+        q.get()
+    elif query[0] == 3:
+        print(q.queue[0])
+
+def isBalanced(s):
+    # balanced brackets 3/21 tests failed
+    out = 'YES'
+    stack = []
+    open = ['(', '[', '{']
+    close = [')', ']', '}']
+    n = len(s)
+    if n % 2 != 0 or s[0] in close:
+        out = 'NO'
+    for ch in s:
+        #print(stack)
+        if ch in open:
+            stack.append(ch)
+        elif ch in close:
+            #print('remove from stack ', br)
+            if len(stack) > 0:
+                br = stack.pop()
+                if br != open[close.index(ch)]:
+                    out = 'NO'
+                    break
+            else:
+                out = 'NO'
+                break
+    return out  
+
+def pairs(k, arr):
+    # passes 13/18 tests
+    
+    from itertools import combinations
+
+    pairs = combinations(arr, 2)
+    #print(pairs)
+    counter = 0
+    for pair in pairs:
+        if abs(pair[0] - pair[1]) == k:
+            counter += 1
+    return counter
+
+def pairs1(k, arr):
+    # passes 1/18 tests
+    counter = 1
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            #print(f'pair: {arr[i]} -  {arr[j]}')
+            if abs(arr[i] - arr[j]) == k:
+                counter += 1
+    return counter
