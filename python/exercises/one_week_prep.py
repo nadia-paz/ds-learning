@@ -305,3 +305,33 @@ def pairs1(k, arr):
             if abs(arr[i] - arr[j]) == k:
                 counter += 1
     return counter
+
+# Day 6
+
+''' Simple text editor.'''
+# doesn't pass some tests because of the time execution
+Q = int(input().strip()) # number of operations
+s = ''
+temp_s = [] # to hold deleted value
+for _ in range(Q):
+    query = input().split()
+    command = int(query[0])
+    if command == 1:
+        temp_s.append(s)
+        s += query[1]
+        #print(command, ' append ' , s)
+    elif command == 2:
+        k = int(query[1])
+        #temp_s = s[-k:]
+        temp_s.append(s)
+        s = s[:-k]
+        #print(command, ' delete last k' , s)
+    elif command == 3:
+        k = int(query[1])
+        print(s[k-1])
+        #print(command, ' print kth char ' , s[k-1])
+    elif command == 4:
+        #s = s + temp_s
+        s = temp_s.pop()
+        #print(command, ' undo ' , s)
+
