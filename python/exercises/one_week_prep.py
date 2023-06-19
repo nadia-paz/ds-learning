@@ -335,3 +335,109 @@ for _ in range(Q):
         s = temp_s.pop()
         #print(command, ' undo ' , s)
 
+# The function is expected to return an INTEGER.
+# The function accepts following parameters:
+#  1. INTEGER n - height
+#  2. INTEGER m - width of the wall
+#
+# if # of gaps = n (height), it's not a good solution.
+# make number_of_way - number of gaps?
+def legoBlocks(n, m):
+    # Write your code here
+    
+    mod = 10**9 + 7
+    #mod = 1000000007
+    
+    
+    # STEP 1
+    # array of size m to hold the number of combinations
+    # of  = blocks in every row
+    combinations = [0, 1, 2, 4, 8] + ([0] * (m - 4))
+    # 1 has 1 comnination (index = m, combination[1] = 1)
+    # 2 -> 2 combinations
+    # 3 -> 4 combinations
+    # 4 -> 8 combinations
+    # if we had blocks of length 5, 5 would be equal to 16
+    # but since we use only blocks till length 4, the number will be 15 
+    # sum of 4 previous elements 8 + 4 + 2 + 1 = 15
+    # if we set the 0 element to 1, we can apply the sum formula and 
+    # quickly fill an array
+    combinations[0] = 1
+    for i in range(5, m+1):
+        combinations[i] += (combinations[i - 1] + combinations[i - 2] +
+                        combinations[i - 3] + combinations[i - 4])
+    #print(combinations)
+    
+    
+    # STEP 2
+    # calculate the number of combinations for all rows 
+    # number of combinations in n'th power and calculate the mode
+    # replace the values in combinations with modulus values
+    # do not calculate number ** 9 if the number is big, the program can collapse
+    for i in range(1, m+1):
+        combinations[i] = pow(combinations[i], n, mod)
+    #print(combinations)
+    
+    # STEP 3
+    # remove vertical blocks
+    # 
+    r = [0] * (m+1)
+    r[1] = 1
+    for j in range(2, m+1):
+        r[j] = combinations[j]
+    
+        for k in range(1, j):
+            r[j] -= r[k]*combinations[j-k]
+            
+        r[j] = r[j] % mod
+        #print(r)
+
+    return r[m] % mod
+
+def cookies(k, A):
+    # passes 50% of tests
+    A.sort()
+    iterations = 0
+    loop = True
+    if A[0] >= k:
+        return 0
+    elif len(A) < 2:
+        return -1
+    else:
+        while (loop):
+            
+            #print(A)
+            new_item = A.pop(0) + 2 * A.pop(1)
+            A.append(new_item)
+            A.sort()
+            iterations += 1
+            if (A[0] >= k or len(A) < 2):
+                loop = False
+        
+        if min(A) >= k:
+            return iterations
+        else:
+            return -1
+
+import heapq as hq
+def cookies(k, A):
+    # passes all tests
+    A.sort()
+    if not A:
+        return -1 
+    elif A[0] >= k:
+        return 0
+    elif len(A) == 1:
+        return -1
+    else:
+        hq.heapify(A)
+        iterations = 0
+        while(A[0] < k):
+            if len(A) == 1:
+                return -1
+                break
+            else:
+                new_value = hq.heappop(A) + 2 * hq.heappop(A)
+                hq.heappush(A, new_value)
+                iterations += 1
+        return iterations
