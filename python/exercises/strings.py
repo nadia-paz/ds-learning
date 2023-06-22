@@ -111,3 +111,40 @@ def print_formatted(number):
         print(str(i).rjust(b), format(i, 'o').rjust(b), format(i, 'X').rjust(b), end=' ')
         print(binary.rjust(b))
         #print('{0:b}').format(i)
+
+def print_rangoli(size):
+    # your code goes here
+    ''' 
+# rangoli of size 5
+
+--------e--------
+------e-d-e------
+----e-d-c-d-e----
+--e-d-c-b-c-d-e--
+e-d-c-b-a-b-c-d-e
+--e-d-c-b-c-d-e--
+----e-d-c-d-e----
+------e-d-e------
+--------e--------
+    '''
+    from string import ascii_lowercase
+    letters = (list(ascii_lowercase)[:size])
+    letters = list(reversed(letters))
+    #letters = list(reversed(letters)) + letters[1:]
+    s = ''
+    rows = size * 2 - 1
+    cols = size + (size - 1) * 3
+
+    for i in range(size):
+        l = letters[:i+1] + list(reversed(letters[:i+1]))[1:]
+        dashed = '-' * (cols // 2 - 2*i)
+        alpha = '-'.join(l)
+        s = s +  dashed + alpha + dashed + '\n'
+        
+    for i in range(size-2, -1, -1):
+        l = letters[:i+1] + list(reversed(letters[:i+1]))[1:]
+        dashed = '-' * (cols // 2 - 2*i)
+        alpha = '-'.join(l)
+        s = s +  dashed + alpha + dashed + '\n'
+    #print(s)
+    return s
