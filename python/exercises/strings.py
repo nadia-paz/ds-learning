@@ -100,3 +100,14 @@ def disigner_door_mat(n ,m):
     for i in range(n//2 - 1, -1, -1):
         print(('-'*(m // 2 - 1 - i*3))+'.' + ('|..' * i) + '|' + ('..|' * i) + '.' + ('-'*(m // 2 - 1 - i*3)))
 
+def print_formatted(number):
+    # your code goes here
+    b = len(format(number, 'b'))
+    for i in range(1, number+1):
+        binary = format(i, 'b')
+        # print(f'{i:>2}', end='')
+        # print('{0:3o}'.format(i), end='')
+        # print(('{0:3X}').format(i), end='')
+        print(str(i).rjust(b), format(i, 'o').rjust(b), format(i, 'X').rjust(b), end=' ')
+        print(binary.rjust(b))
+        #print('{0:b}').format(i)
