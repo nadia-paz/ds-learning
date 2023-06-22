@@ -85,3 +85,18 @@ def wrap(string, max_width):
 
     return textwrap.fill(string, max_width)
 
+def disigner_door_mat(n ,m):
+    # n rows, m columns
+#n, m = list(map(int, input().split()))
+#n, m = 7, 21
+    welcome = 'WELCOME'
+    lw = len(welcome)
+
+    for i in range(n//2):
+        print(('-'*(m // 2 - 1 - i*3))+'.' + ('|..' * i) + '|' + ('..|' * i) + '.' + ('-'*(m // 2 - 1 - i*3)))
+
+    print(('-' * ((m - lw) // 2 ))+welcome+('-' * ((m - lw) // 2)))
+
+    for i in range(n//2 - 1, -1, -1):
+        print(('-'*(m // 2 - 1 - i*3))+'.' + ('|..' * i) + '|' + ('..|' * i) + '.' + ('-'*(m // 2 - 1 - i*3)))
+
