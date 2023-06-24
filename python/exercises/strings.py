@@ -148,3 +148,13 @@ e-d-c-b-a-b-c-d-e
         s = s +  dashed + alpha + dashed + '\n'
     #print(s)
     return s
+
+def merge_the_tools(string, k):
+    # your code goes here
+    #substr = []
+    for i in range(0, len(string), k):
+        s = string[i:i+k]
+        # unique values with the same order
+        s = list(dict.fromkeys(s))
+        #substr.append(s)
+        print(''.join(s))
