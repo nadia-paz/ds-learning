@@ -47,8 +47,11 @@ def print_singly_linked_list(node, sep):
 #
 #
 
-''' throws error, needs improvement '''
+
 def mergeLists(head1, head2):
+    '''
+    merges 2 lists
+    '''
     print('Hi')
     merged = SinglyLinkedList()
     print('List created')
