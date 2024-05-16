@@ -115,26 +115,92 @@ class LinkedList:
             
         return temp
 
+    def get(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        else:
+            temp = self.head
+            for _ in range(index):
+                temp = temp.next
+            return temp
+
+    def set_value(self, index, value):
+        temp = self.get(index)
+        if temp:
+            temp.value = value
+            return True
+        else:
+            return False
+
+    def insert(self, index, value):
+        if index < 0 or index >= self.length:
+            return False
+        if index == 0:
+            self.prepend(value)
+        elif index == self.length:
+            self.append(value)
+        else:
+            temp = self.get(index-1)
+            new_node = Node(value)
+            new_node.next = temp.next
+            temp.next = new_node
+            self.length += 1
+            return True
+
+    def remove(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            return self.pop_first()
+        if index == self.length - 1:
+            return self.pop()
+       
+        prev = self.get(index-1)
+        # node to remove
+        temp = prev.next
+        prev.next = temp.next
+        # break the connection with the LL
+        temp.next = None
+        return temp
+
+    def reverse(self):
+        """
+        Reverse the order of the linked list. Doesn't return anything
+        """
+        # swap 
+        temp = self.head
+        self.head = self.tail
+        self.tail = temp
+
+        # create before and after nodes
+        # we move arrows (connections from after to before)
+        before = None # temp is still head
+        after = temp.next
+
+        # loop through the ll
+        for _ in range(self.length):
+            # move after one step forward
+            after = temp.next
+            # change temp pointer direction
+            temp.next = before
+            # move before to temp
+            before = temp
+            # move temp to after
+            temp = after
+            
 
 
-my_linked_list = LinkedList(2)
-my_linked_list.append(1)
 
 
-# (2) Items - Returns 2 Node
-print(my_linked_list.pop_first().value)
-# (1) Item -  Returns 1 Node
-print(my_linked_list.pop_first().value)
-# (0) Items - Returns None
-print(my_linked_list.pop_first())
+# check get method
+ll = LinkedList(0)
+ll.append(1)
+ll.append(2)
+ll.append(3)
+ll.append(4)
+ll.append(5)
 
-
-
-"""
-    EXPECTED OUTPUT:
-    ----------------
-    2
-    1
-    None
-
-"""
+ll.set_value(4, "Four")
+ll.insert(5, "Five")
+ll.remove(5)
+ll.print_list()
