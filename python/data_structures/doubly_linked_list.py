@@ -141,6 +141,24 @@ class DoublyLinkedList:
             
         self.head, self.tail = self.tail, self.head
 
+    def is_palindrome(self):
+        
+        if self.length <= 1:
+            return True
+        
+        temp_head = self.head
+        temp_tail = self.tail
+        
+        for i in range(self.length // 2):
+            
+            if temp_head.value != temp_tail.value:
+                return False
+        
+            temp_head = temp_head.next
+            temp_tail = temp_tail.prev
+                
+        return True
+
 
 
 dll = DoublyLinkedList(1)
