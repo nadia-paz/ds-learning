@@ -113,7 +113,7 @@ class DoublyLinkedList:
         temp.next = new_node
         self.length += 1 
         return True
-        
+
     def remove(self, index):
         if index < 0 or index >= self.length:
             return None 
@@ -126,6 +126,21 @@ class DoublyLinkedList:
         temp.next.prev = temp.prev
         self.length -= 1 
         return temp
+
+    def reverse(self):
+        
+        if self.length == 0:
+            return False
+        if self.length == 1:
+            return self
+        
+        temp = self.head
+        while temp:
+            temp.prev, temp.next = temp.next, temp.prev
+            temp = temp.prev
+            
+        self.head, self.tail = self.tail, self.head
+
 
 
 dll = DoublyLinkedList(1)
