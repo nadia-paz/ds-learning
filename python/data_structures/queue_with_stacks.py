@@ -15,6 +15,10 @@ class MyQueue:
             # move all elements back to stack1
             for _ in self.stack2:
                 self.stack1.append(self.stack2.pop())
+    def dequeue(self):
+        if len(self.stack1) == 0:
+            return None
+        return self.stack1.pop()
                 
 
     def peek(self):
