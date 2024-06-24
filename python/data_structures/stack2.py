@@ -44,7 +44,7 @@ def is_balanced_parentheses(s):
     if stack.is_empty():
         is_balanced = True
     return is_balanced
-    
+
 def reverse_string(string):
     
     if len(string) <= 1:
@@ -60,6 +60,26 @@ def reverse_string(string):
     while not s.is_empty():
         new_string += s.pop()
     return new_string
+
+def sort_stack(stack):
+    # sorted_stack to keep the greatest value on the top
+    sorted_stack = Stack()
+    # O(n^2)
+    while not stack.is_empty():
+        # create a temp variable
+        temp = stack.pop()
+        # if temp variable is smaller that the greatest value of the sorted_stack
+        while not sorted_stack.is_empty() and temp < sorted_stack.peek():
+            # push the top of the sorted_stack back to stack
+            stack.push(sorted_stack.pop())
+        # push temp variable to the sorted_stack
+        sorted_stack.push(temp)
+    
+    # move all elements back to the original stack, which makes the smallest element to be 
+    # on top
+    while not sorted_stack.is_empty():
+        stack.push(sorted_stack.pop())
+
 
 
 def test_is_balanced_parentheses():
