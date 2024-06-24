@@ -44,6 +44,22 @@ def is_balanced_parentheses(s):
     if stack.is_empty():
         is_balanced = True
     return is_balanced
+    
+def reverse_string(string):
+    
+    if len(string) <= 1:
+        return string
+    
+    s = Stack()
+    # initiate reversed string
+    new_string = ""
+    
+    for letter in string:
+        s.push(letter)
+   
+    while not s.is_empty():
+        new_string += s.pop()
+    return new_string
 
 
 def test_is_balanced_parentheses():
