@@ -52,6 +52,51 @@ class TreeNode:
             elif target > current.value: current = current.right
         return current
 
+    def insert_node(self, value:int):
+        """
+        Insert node with the value. Recursive function. 
+        If the node with the value exists, prints "Failed to insert"
+        Returns None
+        """
+        # case of nulls
+        if self is None or self.value is None:
+            self = TreeNode(value)
+            return
+        current = self
+        new_node = TreeNode(value)
+        # case if the node with this value already exists 
+        if value == current.value:
+            print("Failed to insert")
+            return
+        # case if the value is smaller than current value
+        if value < current.value:
+            # check if left node is null than assign value else recursive call
+            if current.left is None:
+                # assign parent to the new node
+                new_node.parent = current
+                # connect the new node to the current on the left side
+                current.left = new_node
+                return
+            else:
+                current.left.insert_node(value)
+        else: # value > current.value
+            if current.right is None:
+                # assign parent to the new node
+                new_node.parent = current
+                # connect the new node to the current on the left side
+                current.right = new_node
+                # exit 
+                return
+            else: # move down to the right and check if ok to insert there
+                current.right.insert_node(value)
+
+        
+
+
+
+
+###############################################################
+
 def printTree(node, level=0):
         # node = self.root
         if node != None:
@@ -61,6 +106,9 @@ def printTree(node, level=0):
             else:
                 print(' ' * 4 * level + '-> ' + str(node.value))
             printTree(node.left, level + 1)
+
+###############################################################
+################ Test Functions ###############################
 
 root = TreeNode(47)
 left = TreeNode(33, parent=root)
@@ -78,3 +126,11 @@ printTree(root)
 for target in [12, 47, 33, 56, 96]:
     result = root.find_value(target)
     print(result.value if result else result)
+
+print("\nCheck insert")
+print(root.insert_node(12))
+root.insert_node(6)
+root.insert_node(44)
+root.insert_node(53)
+print(root.insert_node(6)) # should be False, 6 already exists
+printTree(root)
