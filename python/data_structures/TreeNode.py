@@ -147,19 +147,19 @@ class TreeNode:
         # case when the node is a leaf (doesn't have children)
         if node.left is None and node.right is None:
             if node.parent is None: # it's only node in the tree
-                del node
+                # del node
                 return True
             if value < node.parent.value: # node is located to the left
                 # break connections
                 node.parent.left, node.parent = None, None
-                del node
+                # del node
                 return True
             if value > node.parent.value: # node is located to the right of parent
                 node.parent.right, node.parent = None, None
-                del node 
+                # del node 
                 return True
         
-        # case when the node has on child
+        # case when the node has one child
         if node.left is None or node.right is None:
             # has only child on the righ
             child = node.left if node.left else node.right
@@ -177,23 +177,53 @@ class TreeNode:
         # find leftmost node if exists
         while successor.left:
             successor = successor.left
-        # place a successor on the node's position and remove the node
-        successor.parent = node.parent
-        # check if it is root do 
-        if node.parent is None:
-            pass
-        # the the node is located to the left of the parent, point the parent's left to the successor
-        elif value < node.parent.value:
-            node.parent.left = successor
-        elif value > node.parent.value:
-            node.parent.right = successor
+        print("Successor value is", successor.value)
+        self.delete_node(successor.value)
 
-
-
+        print('Delete')
+        printTree(self)
+        print("###################\n")
         
+        # place a successor on the node's position
+        
+        # check if it is root do nothing
+        if node.parent is None:
+            self = successor
+            # pass
+        # otherwise it has a parent
+        # point node's parent to successor
+        elif node.parent.left == node:
+            node.parent.left = successor
+        elif node.parent.right == node:
+            node.parent.right = successor
+        successor.parent = node.parent
+        
+        # link successor to node's children
+        successor.left = node.left
+        node.left.parent = successor
 
-
-
+        # here is a problem with assignment, rewrite!
+        successor.right = node.right 
+        if node.right != None:
+            node.right.parent == successor
+        if successor.parent is None:
+            self = successor
+            self.left = successor.left
+            self.right = successor.right
+        # prints a tree with new root
+        # doesn't do this when method called from outside
+        printTree(self)
+        print(list(self.tree_to_array()))
+        print(successor.parent.value if successor.parent else successor.parent)
+        print(successor.left.value if successor.left else successor.left)
+        print(successor.right.value if successor.right else successor.right)
+        print(successor.left.parent.value if successor.left.parent else 0)
+        # didn't assign correct parent to the right child
+        print(successor.right.parent.value if successor.right.parent else 0)
+        return True
+            
+            
+        
 
 ###############################################################
 ################ Helper Functions #############################
@@ -209,13 +239,17 @@ def printTree(node, level=0):
             printTree(node.left, level + 1)
 
 
-def build_test_tree(extended = False):
+def build_test_tree(extended = False, extended2 = False):
     root = TreeNode(47)
     left = TreeNode(33, parent=root)
     right = TreeNode(56, parent=root)
     root.left, root.right = left, right
     if extended:
         for i in [12, 6, 44, 45, 53]:
+            root.insert_node(i)
+    if extended2:
+        root = TreeNode(50)
+        for i in [23, 67, 14, 38, 60, 81, 6, 17, 27, 42, 59, 63, 78, 92, 1, 7, 21, 29, 58, 91, 95]:
             root.insert_node(i)
         
     # printTree(root)
@@ -284,7 +318,7 @@ def check_delete():
 
 
     # check leafs
-    print('\nCase - delete leafs')
+    print('\nCase - delete leaves')
     root = build_test_tree(extended=True)
     # tree is [6, 12, 33, 44, 45, 47, 53, 56], root 47
     leafs = [6, 45, 53]
@@ -295,9 +329,9 @@ def check_delete():
             print(f"Leaf {l} - fail")
     try:
         list(root.tree_to_array()) == [12, 33, 44, 47, 56]
-        print('Leafs deleted correctly')
+        print('Leaves deleted correctly')
     except AssertionError:
-        print("Nodes deleted incorrect")
+        print("Leaves deleted incorrect")
     
     # chech node with one child only
     print('\nCase one child only')
@@ -316,6 +350,15 @@ def check_delete():
     except AssertionError:
         print("Nodes deleted incorrect")
 
+    # case when node has 2 children
+    root = build_test_tree(extended2=True)
+    try:
+        arr = [1, 6, 7, 14, 17, 21, 23, 27, 29, 38, 42, 50, 58, 59, 60, 63, 67, 78, 91, 92, 95]
+        assert list(root.delete(81)) == arr
+    except AssertionError:
+        print('Incorrect deletion of node 81')
+
+
 
     
 # print("\nCheck find_value")
@@ -326,18 +369,12 @@ def check_delete():
 
 # printTree(build_test_tree(extended=True))
 # print("\nCheck delete")
-check_delete()
+# check_delete()
 
-# root = build_test_tree(extended=True)
+
+
+root = build_test_tree(extended2=True)
+root.delete_node(81)
+# root.delete_node(91)
 # printTree(root)
 # print(list(root.tree_to_array()))
-
-# for i in [12, 44, 56]:
-#     root.delete_node(i)
-# print(list(root.tree_to_array()))
-
-# root = build_test_tree(extended=True)
-# for i in [6, 45, 53]:
-#     root.delete_node(i)
-# print(list(root.tree_to_array()))
-
