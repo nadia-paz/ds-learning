@@ -155,20 +155,13 @@ class TreeNode:
         # case when the node has on child
         if node.left is None or node.right is None:
             # has only child on the righ
-            if node.left is None:
-                # connect child on the right to the new parent
-                node.right.parent = node.parent
-                node.parent.right = node.right
-                # remove mode's connection
-                node.parent, node.right = None, None
-                del node
-                return True
-            else: # has a child on its left
-                node.left.parent = node.parent
-                node.parent.left = node.left
-                node.parent, node.left = None, None
-                del node
-                return True
+            child = node.left if node.left else node.right
+            child.parent = node.parent
+            if node.parent.left == node:
+                node.parent.left = child
+            else:
+                node.parent.right = child 
+            return True
 
         # case when the node has two children
         # find a successor -> the minimum (or the leftmost) node in the right-hand subtree
