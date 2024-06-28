@@ -52,16 +52,21 @@ class TreeNode:
             elif target > current.value: current = current.right
         return current
 
-    def insert_node(self, value:int):
+    def insert_node_rec(self, value:int):
         """
         Insert node with the value. Recursive function. 
         If the node with the value exists, prints "Failed to insert"
         Returns None
         """
         # case of nulls
-        if self is None or self.value is None:
+        if self is None:
             self = TreeNode(value)
             return
+        
+        if self.value is None:
+            self.value = value
+            return
+
         current = self
         new_node = TreeNode(value)
         # case if the node with this value already exists 
@@ -89,6 +94,81 @@ class TreeNode:
                 return
             else: # move down to the right and check if ok to insert there
                 current.right.insert_node(value)
+
+    def insert_node(self, value):
+        """ 
+        Iterative approach, inserts node with the while loop
+        Returns True if inserted, False otherwise
+        """
+        new_node = TreeNode(value)
+        # case of nulls
+        if self is None:
+            self = TreeNode(value)
+            return True
+        if self.value is None:
+            self.value = value
+            return True
+        
+        current = self
+        new_node = TreeNode(value)
+        while True:
+            if value == current.value:
+                return False
+            if value < current.value:
+                if current.left is None:
+                    current.left = new_node
+                    new_node.parent = current
+                    return True
+                current = current.left
+            else:
+                if current.right is None:
+                    current.right = new_node
+                    new_node.parent = current
+                    return True
+                current = current.right
+        
+    def delete_node(self, value):
+        # find the node to delete
+        node = self.find_value(value)
+        if node is None:
+            return False
+
+        # case when the node is a leaf (doesn't have children)
+        if node.left is None and node.right is None:
+            if node.parent is None: # it's only node in the tree
+                del node
+                return True
+            if value < node.parent.value: # node is located to the left
+                # break connections
+                node.parent.left, node.parent = None, None
+                del node
+                return True
+            if value > node.parent.value: # node is located to the right of parent
+                node.parent.right, node.parent = None, None
+                del node 
+                return True
+        
+        # case when the node has on child
+        if node.left is None or node.right is None:
+            # has only chil on the righ
+            if node.left is None:
+                # connect child on the right to the new parent
+                node.right.parent = node.parent
+                node.parent.right = node.right
+                # remove mode's connection
+                node.parent, node.right = None, None
+                del node
+                return True
+            else: # has a child on its left
+                node.left.parent = node.parent
+                node.parent.left = node.left
+                node.parent, node.left = None, None
+                del node
+                return True
+
+        # case when the node has two children
+        
+
 
         
 
@@ -131,6 +211,16 @@ print("\nCheck insert")
 print(root.insert_node(12))
 root.insert_node(6)
 root.insert_node(44)
+root.insert_node(45)
 root.insert_node(53)
 print(root.insert_node(6)) # should be False, 6 already exists
+printTree(root)
+
+root1 = TreeNode(None)
+root1.insert_node(2)
+printTree(root1)
+
+print("\nCheck delete")
+print(root.delete_node(12))
+print(root.delete_node(44))
 printTree(root)
