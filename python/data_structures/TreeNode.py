@@ -13,6 +13,13 @@ class TreeNode:
         self.left = left
         self.right = right
         
+    def tree_to_array(self):
+        # left
+        if self.left: yield from self.left.tree_to_array()
+        # value
+        yield self.value
+        # right
+        if self.right: yield from self.right.tree_to_array()
 
     # def find_value(self, current, target: int):
     def find_value_rec(self, target:int):
@@ -201,6 +208,7 @@ def printTree(node, level=0):
                 print(' ' * 4 * level + '-> ' + str(node.value))
             printTree(node.left, level + 1)
 
+
 def build_test_tree(extended = False):
     root = TreeNode(47)
     left = TreeNode(33, parent=root)
@@ -278,32 +286,35 @@ def check_delete():
     # check leafs
     print('\nCase - delete leafs')
     root = build_test_tree(extended=True)
-    printTree(root)
+    # tree is [6, 12, 33, 44, 45, 47, 53, 56], root 47
     leafs = [6, 45, 53]
     for l in leafs:
         try:
             root.delete_node(l) == True
-            print(f'Leaf {l} - pass')
         except AssertionError:
             print(f"Leaf {l} - fail")
-    print("\nTree after deletion:")
-    printTree(root)
-    print("#######################")
+    try:
+        list(root.tree_to_array()) == [12, 33, 44, 47, 56]
+        print('Leafs deleted correctly')
+    except AssertionError:
+        print("Nodes deleted incorrect")
     
     # chech node with one child only
     print('\nCase one child only')
     root = build_test_tree(extended=True)
-    printTree(root)
+    # printTree(root)
     nodes = [12, 44, 56]
     for n in nodes:
         try:
             root.delete_node(n) == True
-            print(f'Node {n} - pass')
+            # print(f'Node {n} - pass')
         except AssertionError:
             print(f'Node {n} - fail')
-    print("\nTree after deletion:")
-    printTree(root)
-    print("#######################")
+    try:
+        list(root.tree_to_array()) == [6, 33, 45, 47, 53]
+        print("Nodes with one child deleted correctly")
+    except AssertionError:
+        print("Nodes deleted incorrect")
 
 
     
@@ -315,12 +326,18 @@ def check_delete():
 
 # printTree(build_test_tree(extended=True))
 # print("\nCheck delete")
-# check_delete()
+check_delete()
 
-root = build_test_tree(extended=True)
-printTree(root)
-for i in [12, 44, 56]:
-    root.delete_node(i)
+# root = build_test_tree(extended=True)
+# printTree(root)
+# print(list(root.tree_to_array()))
 
-print("\nTree after deletion:")
-printTree(root)
+# for i in [12, 44, 56]:
+#     root.delete_node(i)
+# print(list(root.tree_to_array()))
+
+# root = build_test_tree(extended=True)
+# for i in [6, 45, 53]:
+#     root.delete_node(i)
+# print(list(root.tree_to_array()))
+
