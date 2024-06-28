@@ -128,6 +128,10 @@ class TreeNode:
                 current = current.right
         
     def delete_node(self, value):
+        if self is None:
+            return False
+        if self.value is None:
+            return False
         # find the node to delete
         node = self.find_value(value)
         if node is None:
@@ -150,7 +154,7 @@ class TreeNode:
         
         # case when the node has on child
         if node.left is None or node.right is None:
-            # has only chil on the righ
+            # has only child on the righ
             if node.left is None:
                 # connect child on the right to the new parent
                 node.right.parent = node.parent
@@ -167,7 +171,23 @@ class TreeNode:
                 return True
 
         # case when the node has two children
-        
+        # find a successor -> the minimum (or the leftmost) node in the right-hand subtree
+        # if there is no leftmost node in the right subtree, the node's right child is a successor
+        successor = node.right
+        # find leftmost node if exists
+        while successor.left:
+            successor = successor.left
+        # place a successor on the node's position and remove the node
+        successor.parent = node.parent
+        # check if it is root do 
+        if node.parent is None:
+            pass
+        # the the node is located to the left of the parent, point the parent's left to the successor
+        elif value < node.parent.value:
+            node.parent.left = successor
+        elif value > node.parent.value:
+            node.parent.right = successor
+
 
 
         
@@ -176,6 +196,7 @@ class TreeNode:
 
 
 ###############################################################
+################ Helper Functions #############################
 
 def printTree(node, level=0):
         # node = self.root
@@ -187,40 +208,126 @@ def printTree(node, level=0):
                 print(' ' * 4 * level + '-> ' + str(node.value))
             printTree(node.left, level + 1)
 
+def build_test_tree(extended = False):
+    root = TreeNode(47)
+    left = TreeNode(33, parent=root)
+    right = TreeNode(56, parent=root)
+    root.left, root.right = left, right
+    if extended:
+        for i in [12, 6, 44, 45, 53]:
+            root.insert_node(i)
+        
+    # printTree(root)
+    return root
+
+
 ###############################################################
 ################ Test Functions ###############################
 
-root = TreeNode(47)
-left = TreeNode(33, parent=root)
-right = TreeNode(56, parent=root)
-root.left, root.right = left, right
+def check_find_value():
+    root = build_test_tree()
+    a = [None, 47, 33, 56, None]
+    values = []
+    for target in [12, 47, 33, 56, 96]:
+        result = root.find_value(target)
+        values.append(result.value if result else result)
+    try:
+        assert a == values
+        print("Find values works ok")
+    except AssertionError:
+        print("Find values works incorrect")
 
-# root.value = 47
-# root.left = left
-# root.right = right
-# left.value = 33
-# right.value = 56
-# left.parent = right.parent = root
 
+def check_insert():
+    # check insert to the empty tree
+    root1 = TreeNode(None)
+    root1.insert_node(2)
+    printTree(root1)
+
+    # check insert to the regular tree
+    root = build_test_tree()
+    for i in [12, 6, 44, 45, 53]:
+        try:
+            assert root.insert_node(i) == True
+        except AssertionError:
+            print("Insertion of %d failed" %i)
+    try:
+        root.insert_node(6) == False # should be False, 6 already exists
+    except AssertionError:
+        print("Fail. 6 already exist")
+    printTree(root)
+
+
+def check_delete():
+    # case the root is None
+    print('\nCase empty tree')
+    root = TreeNode(None)
+    values = [None, 3]
+    for v in values:
+        try:
+            root.delete_node(v) == False
+            print(f'Value {v} - pass')
+        except AssertionError:
+            print(f'{v} didn\'t pass deletion test')
+    
+    # case the node is not found
+    print('\nCase value not found')
+    root = build_test_tree(extended=True)
+    values = [3, 2, 1, 100]
+    for v in values:
+        try:
+            root.delete_node(v) == False
+            print(f'Value {v} - pass')
+        except AssertionError:
+            print(f'{v} didn\'t pass deletion test')
+
+
+    # check leafs
+    print('\nCase - delete leafs')
+    root = build_test_tree(extended=True)
+    printTree(root)
+    leafs = [6, 45, 53]
+    for l in leafs:
+        try:
+            root.delete_node(l) == True
+            print(f'Leaf {l} - pass')
+        except AssertionError:
+            print(f"Leaf {l} - fail")
+    print("\nTree after deletion:")
+    printTree(root)
+    print("#######################")
+    
+    # chech node with one child only
+    print('\nCase one child only')
+    root = build_test_tree(extended=True)
+    printTree(root)
+    nodes = [12, 44, 56]
+    for n in nodes:
+        try:
+            root.delete_node(n) == True
+            print(f'Node {n} - pass')
+        except AssertionError:
+            print(f'Node {n} - fail')
+    print("\nTree after deletion:")
+    printTree(root)
+    print("#######################")
+
+
+    
+# print("\nCheck find_value")
+# check_find_value()
+
+# print("\nCheck insert")
+# check_insert()
+
+# printTree(build_test_tree(extended=True))
+# print("\nCheck delete")
+# check_delete()
+
+root = build_test_tree(extended=True)
 printTree(root)
-for target in [12, 47, 33, 56, 96]:
-    result = root.find_value(target)
-    print(result.value if result else result)
+for i in [12, 44, 56]:
+    root.delete_node(i)
 
-print("\nCheck insert")
-print(root.insert_node(12))
-root.insert_node(6)
-root.insert_node(44)
-root.insert_node(45)
-root.insert_node(53)
-print(root.insert_node(6)) # should be False, 6 already exists
-printTree(root)
-
-root1 = TreeNode(None)
-root1.insert_node(2)
-printTree(root1)
-
-print("\nCheck delete")
-print(root.delete_node(12))
-print(root.delete_node(44))
+print("\nTree after deletion:")
 printTree(root)
