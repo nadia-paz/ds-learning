@@ -174,22 +174,21 @@ class TreeNode:
         # find a successor -> the minimum (or the leftmost) node in the right-hand subtree
         # if there is no leftmost node in the right subtree, the node's right child is a successor
         successor = node.right
+        
+        # if there is nothing on the left side, the right child is a successor
+        is_right_child = False if successor.left else True
+
         # find leftmost node if exists
         while successor.left:
             successor = successor.left
-        print("Successor value is", successor.value)
-        self.delete_node(successor.value)
 
-        print('Delete')
-        printTree(self)
-        print("###################\n")
+        self.delete_node(successor.value)
         
         # place a successor on the node's position
         
         # check if it is root do nothing
         if node.parent is None:
-            self = successor
-            # pass
+            pass
         # otherwise it has a parent
         # point node's parent to successor
         elif node.parent.left == node:
@@ -199,27 +198,29 @@ class TreeNode:
         successor.parent = node.parent
         
         # link successor to node's children
+
+        #left side
         successor.left = node.left
         node.left.parent = successor
 
-        # here is a problem with assignment, rewrite!
+        # extra careful with the right child. it can be successor and can be removed
+        # if not is_right_child:
         successor.right = node.right 
         if node.right != None:
-            node.right.parent == successor
+            node.right.parent = successor
+
+
+        # if the node is a root
         if successor.parent is None:
             self = successor
             self.left = successor.left
             self.right = successor.right
+
         # prints a tree with new root
-        # doesn't do this when method called from outside
-        printTree(self)
-        print(list(self.tree_to_array()))
-        print(successor.parent.value if successor.parent else successor.parent)
-        print(successor.left.value if successor.left else successor.left)
-        print(successor.right.value if successor.right else successor.right)
-        print(successor.left.parent.value if successor.left.parent else 0)
-        # didn't assign correct parent to the right child
-        print(successor.right.parent.value if successor.right.parent else 0)
+        # doesn't do this when method called from outside and fails the test
+        # printTree(self)
+        # print(list(self.tree_to_array()))
+        
         return True
             
             
@@ -277,7 +278,7 @@ def check_insert():
     # check insert to the empty tree
     root1 = TreeNode(None)
     root1.insert_node(2)
-    printTree(root1)
+    # printTree(root1)
 
     # check insert to the regular tree
     root = build_test_tree()
@@ -290,7 +291,7 @@ def check_insert():
         root.insert_node(6) == False # should be False, 6 already exists
     except AssertionError:
         print("Fail. 6 already exist")
-    printTree(root)
+    # printTree(root)
 
 
 def check_delete():
@@ -354,27 +355,40 @@ def check_delete():
     root = build_test_tree(extended2=True)
     try:
         arr = [1, 6, 7, 14, 17, 21, 23, 27, 29, 38, 42, 50, 58, 59, 60, 63, 67, 78, 91, 92, 95]
-        assert list(root.delete(81)) == arr
+        assert root.delete_node(81) == True
+        assert list(root.tree_to_array()) == arr
+        print('Node 81 - pass')
     except AssertionError:
-        print('Incorrect deletion of node 81')
+        print('Node 81 - fail')
+    try:
+        arr = [1, 6, 7, 14, 17, 21, 23, 27, 29, 38, 42, 50, 58, 59, 60, 63, 67, 78, 92, 95]
+        assert root.delete_node(91) == True
+        assert list(root.tree_to_array()) == arr
+        print('Node 91 - pass')
+    except AssertionError:
+        print('Node 91 - fail')
+    # check deletion of the root
+    try:
+        arr = [1, 6, 7, 14, 17, 21, 23, 27, 29, 38, 42, 58, 59, 60, 63, 67, 78, 92, 95]
+        assert root.delete_node(50) == True
+        assert list(root.tree_to_array()) == arr
+        print('Root - pass')
+    except AssertionError:
+        print('Root - fail') # returns fail, 
+        # prints correct tree inside the delete_node method
+        # solution 1 -> return a new tree and reasign
+        # solution 2 -> create a class BinarySearchTree and in case of root make
+        # self.root = successor
 
 
 
     
-# print("\nCheck find_value")
-# check_find_value()
+print("\nCheck find_value")
+check_find_value()
 
-# print("\nCheck insert")
-# check_insert()
+print("\nCheck insert")
+check_insert()
 
 # printTree(build_test_tree(extended=True))
-# print("\nCheck delete")
-# check_delete()
-
-
-
-root = build_test_tree(extended2=True)
-root.delete_node(81)
-# root.delete_node(91)
-# printTree(root)
-# print(list(root.tree_to_array()))
+print("\nCheck delete")
+check_delete()
